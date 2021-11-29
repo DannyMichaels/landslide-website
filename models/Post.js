@@ -33,6 +33,11 @@ const PostSchema = new Schema(
       type: [ImageSchema],
       required: false,
     },
+
+    thumbnail: {
+      type: ImageSchema,
+      required: false,
+    },
   },
   { timestamps: true }
 );
