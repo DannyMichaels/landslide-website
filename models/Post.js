@@ -24,7 +24,7 @@ const PostSchema = new Schema(
 
     // uploadedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
 
-    content: {
+    body: {
       type: String,
       required: [true, 'Please add a body for this post'],
     },
