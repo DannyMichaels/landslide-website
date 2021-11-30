@@ -39,6 +39,11 @@ const PostSchema = new Schema(
       type: ImageSchema,
       required: false,
     },
+
+    videoUrl: {
+      type: String,
+      required: false,
+    },
   },
   { timestamps: true }
 );

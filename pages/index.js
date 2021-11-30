@@ -1,5 +1,6 @@
 import Head from 'next/head';
 import styled from 'styled-components';
+import Hero from '../components/Home/Hero';
 
 export default function Home() {
   return (
@@ -10,14 +11,10 @@ export default function Home() {
       </Head>
 
       <Container>
-        <h1>Hello</h1>
+        <Hero />
       </Container>
     </div>
   );
 }
 
-const Container = styled.div`
-  h1 {
-    color: red;
-  }
-`;
+const Container = styled.div``;
