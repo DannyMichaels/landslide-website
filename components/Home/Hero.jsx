@@ -4,10 +4,10 @@ import ScrollForMore from '../buttons/ScrollForMore';
 
 export default function Hero() {
   return (
-    <HeroImage>
+    <Container>
       <div className="overlay">
         <h1>Landslide</h1>
-        {/* <p>And I'm a Photographer</p> */}
+        {/* <p>Subtitle</p> */}
       </div>
 
       <Image
@@ -18,29 +18,18 @@ export default function Hero() {
         height={1080}
         className="hero__image"
         width={1920}
+        blurDataURL="/assets/hero.jpg"
+        placeholder="blur"
       />
 
       <div className="hero__view-more">
         <ScrollForMore />
       </div>
-    </HeroImage>
+    </Container>
   );
 }
 
-const HeroImage = styled.div`
-  /* Use "linear-gradient" to add a darken background effect to the image (photographer.jpg). This will make the text easier to read */
-  /* background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-    url('/assets/hero.jpg'); */
-
-  /* Set a specific height */
-  /* height: 89vh; */
-
-  /* Position and center the image to scale nicely on all screens */
-  /* background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  position: relative; */
-
+const Container = styled.div`
   position: relative;
   height: 100%;
 
@@ -57,15 +46,6 @@ const HeroImage = styled.div`
       font-weight: 700;
     }
   }
-  /* Place text in the middle of the image */
-  /* .hero__text {
-    text-align: center;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: white;
-  } */
 
   .hero__view-more {
     position: absolute;
