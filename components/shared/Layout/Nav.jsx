@@ -10,6 +10,10 @@ const LINKS = [
     text: 'news',
     route: '/news',
   },
+  {
+    text: 'music',
+    route: '/music',
+  },
 ];
 
 export default function Nav() {

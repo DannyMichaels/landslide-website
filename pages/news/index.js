@@ -5,7 +5,7 @@ export default function Posts({ allPosts }) {
   return <>{JSON.stringify(allPosts)}</>;
 }
 
-/* Retrieves pet(s) data from mongodb database */
+/* Retrieves post(s) data from mongodb database */
 export async function getServerSideProps() {
   await dbConnect();
 
