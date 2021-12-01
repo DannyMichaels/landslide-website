@@ -40,7 +40,7 @@ const ItemContainer = styled.div`
     background-color: white;
     border-radius: 1px;
     height: 6px;
-    left: 10px;
+    left: 12px;
     position: absolute;
     top: 10px;
     width: 2px;
