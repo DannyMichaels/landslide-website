@@ -6,9 +6,7 @@ import Head from 'next/head';
 export default function Hero() {
   return (
     <>
-      <Head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      </Head>
+      <Head></Head>
       <Container>
         <div className="overlay">
           <h1>Landslide</h1>
@@ -23,6 +21,7 @@ export default function Hero() {
           placeholder="blur"
           objectFit="contain"
           objectPosition="center"
+          alt="The band"
         />
         <div className="hero__scroll-for-more">
           <ScrollForMore />
