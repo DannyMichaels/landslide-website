@@ -1,7 +1,6 @@
 import Head from 'next/head';
 import styled from 'styled-components';
 import Hero from '../components/Home/Hero';
-import Header from '../components/shared/Layout/Header';
 
 export default function Home() {
   return (
@@ -25,7 +24,6 @@ export default function Home() {
           rel="stylesheet"
         />
       </Head>
-      <Header />
       <Container>
         <Hero />
       </Container>

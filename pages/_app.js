@@ -1,5 +1,6 @@
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import AudioPlayer from '../components/AudioPlayer/AudioPlayer';
+import Layout from '../components/shared/Layout/Layout';
 import { AppStateProvider } from './../context/state';
 
 const GlobalStyle = createGlobalStyle`
@@ -25,7 +26,9 @@ function App({ Component, pageProps }) {
       <GlobalStyle />
 
       <ThemeProvider theme={theme}>
-        <Component {...pageProps} />
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
 
         <AudioPlayer />
       </ThemeProvider>
