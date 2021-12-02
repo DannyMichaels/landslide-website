@@ -214,21 +214,34 @@ const AudioPlayer = () => {
 };
 
 const Container = styled.div`
-  font-family: 'Montserrat';
-  max-width: 50vw;
-  padding: 16px;
-  border-radius: 6px 6px 0 0;
-  box-shadow: 0 28px 28px rgba(0, 0, 0, 0.2);
-  margin: auto;
-  color: #fff;
-  border: 1px solid #fff;
   display: flex;
   align-items: center;
-  background: #000;
+  justify-content: center;
+
   position: fixed;
   bottom: 0;
   right: 0;
+
+  font-family: 'Montserrat';
+  max-width: 350px;
+
+  padding: 16px;
+  border-radius: 6px 6px 0 0;
+  box-shadow: 0 28px 28px rgba(0, 0, 0, 0.2);
+  color: #fff;
+  border: 1px solid #fff;
+  background: #000;
   transition: all 250ms ease-in-out;
+  min-height: 6px;
+  min-width: 3px;
+
+  @media screen and (max-width: 500px) {
+    max-width: ${({ isMoreShowing }) => (isMoreShowing ? '100%' : '37px')};
+    padding: 0;
+    margin: 0;
+    left: 0;
+    min-height: 36px;
+  }
 
   .arrow {
     z-index: 2;
@@ -287,8 +300,8 @@ const Container = styled.div`
 
   .title {
     font-weight: 700;
-    margin-bottom: 0;
-    margin-top: 0;
+    margin-bottom: 5px;
+    margin-top: 5px;
   }
 
   .artist {
