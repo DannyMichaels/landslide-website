@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import Album from './Album';
 
 const Schema = mongoose.Schema;
 
@@ -17,6 +18,17 @@ const SongSchema = new Schema(
     description: {
       type: String,
       required: false,
+    },
+
+    _album: {
+      required: false,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Album',
+    },
+
+    isSingle: {
+      required: false,
+      default: false,
     },
   },
   { timestamps: true }

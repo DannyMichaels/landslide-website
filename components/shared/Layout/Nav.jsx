@@ -55,9 +55,9 @@ const LinkContainer = styled.div`
     vertical-align: middle;
     text-decoration: none;
     transition: color 250ms ease-in-out;
-  }
 
-  &:hover > a {
-    color: rgba(255, 255, 255, 0.4);
+    &:hover {
+      color: rgba(255, 255, 255, 0.4);
+    }
   }
 `;
