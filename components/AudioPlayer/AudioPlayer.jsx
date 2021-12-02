@@ -5,10 +5,12 @@ import Backdrop from './Backdrop';
 import styled from 'styled-components';
 import { getAllSongs } from '../../services/songs.services';
 import { FaArrowUp as ArrowUp } from 'react-icons/fa';
+import Tooltip from '../shared/Tooltip/Tooltip';
 
 const AudioPlayer = () => {
   const [allSongs, setAllSongs] = useState(null);
   const [isMoreShowing, setIsMoreShowing] = useState(true);
+  const [volume, setVolume] = useState(1);
 
   useEffect(() => {
     const fetchSongs = async () => {
@@ -120,6 +122,10 @@ const AudioPlayer = () => {
   }, []);
 
   useEffect(() => {
+    audioRef.current.volume = volume;
+  }, [volume]);
+
+  useEffect(() => {
     if (isPlaying) {
       audioRef.current.play();
       startTimer();
@@ -161,10 +167,16 @@ const AudioPlayer = () => {
         className="audio-player"
         isPlaying={isPlaying}
         isMoreShowing={isMoreShowing}>
-        <ArrowUp
-          className="arrow"
-          onClick={() => setIsMoreShowing((prevState) => !prevState)}
-        />
+        <Tooltip
+          content="Tooltip text!"
+          direction="top"
+          delay={100}
+          position="absolute">
+          <ArrowUp
+            className="arrow"
+            onClick={() => setIsMoreShowing((prevState) => !prevState)}
+          />
+        </Tooltip>
 
         {isMoreShowing && (
           <div className="track-info">

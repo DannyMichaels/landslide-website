@@ -5,7 +5,7 @@ import { AppStateProvider } from './../context/state';
 import Head from 'next/head';
 
 const GlobalStyle = createGlobalStyle`
-  body {
+body {
     margin: 0;
     padding: 0;
     box-sizing: border-box;

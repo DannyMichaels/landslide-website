@@ -38,6 +38,10 @@ const SongSchema = new Schema(
       type: String,
     },
 
+    bpm: {
+      type: Number,
+    },
+
     musicStoreUrls: {
       type: [
         {
