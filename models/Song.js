@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import Album from './Album';
 
 const Schema = mongoose.Schema;
 
@@ -20,18 +19,26 @@ const SongSchema = new Schema(
       required: false,
     },
 
-    _album: {
+    recordLabel: {
+      type: String,
       required: false,
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Album',
     },
 
-    isSingle: {
-      required: false,
-      default: false,
+    _album: {
+      ref: 'Album',
+      type: mongoose.Schema.Types.ObjectId,
+    },
+
+    artist: {
+      type: String,
+      default: 'Landslide',
+    },
+
+    length: {
+      type: String,
     },
   },
   { timestamps: true }
 );
 
-export default mongoose.models.Song || mongoose.model('Song', SongSchema);
+export default mongoose?.models?.Song || mongoose.model('Song', SongSchema);

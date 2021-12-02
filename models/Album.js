@@ -23,6 +23,23 @@ const AlbumSchema = new Schema(
       type: String,
       required: false,
     },
+
+    songs: {
+      type: [
+        {
+          _song: {
+            ref: 'Song',
+            type: mongoose.Schema.Types.ObjectId,
+          },
+        },
+      ],
+      default: [],
+    },
+
+    artist: {
+      type: String,
+      default: 'Landslide',
+    },
   },
   { timestamps: true }
 );
