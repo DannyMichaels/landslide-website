@@ -37,6 +37,20 @@ const SongSchema = new Schema(
     length: {
       type: String,
     },
+
+    musicStoreUrls: {
+      type: [
+        {
+          spotify: {
+            type: String,
+          },
+
+          appleMusic: {
+            type: String,
+          },
+        },
+      ],
+    },
   },
   { timestamps: true }
 );

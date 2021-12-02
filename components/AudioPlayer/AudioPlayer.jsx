@@ -4,10 +4,11 @@ import AudioControls from './AudioControls';
 import Backdrop from './Backdrop';
 import styled from 'styled-components';
 import { getAllSongs } from '../../services/songs.services';
-import dbConnect from '../../lib/dbConnect';
+import { FaArrowUp as ArrowUp } from 'react-icons/fa';
 
 const AudioPlayer = () => {
   const [allSongs, setAllSongs] = useState(null);
+  const [isMoreShowing, setIsMoreShowing] = useState(true);
 
   useEffect(() => {
     const fetchSongs = async () => {
@@ -114,6 +115,7 @@ const AudioPlayer = () => {
   };
 
   useEffect(() => {
+    // set audioRef on mount
     audioRef.current = new Audio(audioSrc);
   }, []);
 
@@ -122,6 +124,7 @@ const AudioPlayer = () => {
       audioRef.current.play();
       startTimer();
     } else {
+      // pause when isPlaying is false.
       audioRef.current.pause();
     }
   }, [isPlaying]);
@@ -154,34 +157,44 @@ const AudioPlayer = () => {
   return (
     song &&
     audioRef.current && (
-      <Container className="audio-player">
-        <div className="track-info">
-          <img
-            className="artwork"
-            src={image}
-            alt={`track artwork for ${title} by ${artist}`}
-          />
-          <h2 className="title">{title}</h2>
-          <h3 className="artist">{artist}</h3>
-          <AudioControls
-            isPlaying={isPlaying}
-            onPrevClick={toPrevTrack}
-            onNextClick={toNextTrack}
-            onPlayPauseClick={setIsPlaying}
-          />
-          <input
-            type="range"
-            value={trackProgress}
-            step="1"
-            min="0"
-            max={duration ? duration : `${duration}`}
-            className="progress"
-            onChange={(e) => onScrub(e.target.value)}
-            onMouseUp={onScrubEnd}
-            onKeyUp={onScrubEnd}
-            style={{ background: trackStyling }}
-          />
-        </div>
+      <Container
+        className="audio-player"
+        isPlaying={isPlaying}
+        isMoreShowing={isMoreShowing}>
+        <ArrowUp
+          className="arrow"
+          onClick={() => setIsMoreShowing((prevState) => !prevState)}
+        />
+
+        {isMoreShowing && (
+          <div className="track-info">
+            <img
+              className="artwork"
+              src={image}
+              alt={`track artwork for ${title} by ${artist}`}
+            />
+            <h2 className="title">{title}</h2>
+            {/* <h3 className="artist">{artist}</h3> */}
+            <AudioControls
+              isPlaying={isPlaying}
+              onPrevClick={toPrevTrack}
+              onNextClick={toNextTrack}
+              onPlayPauseClick={setIsPlaying}
+            />
+            <input
+              type="range"
+              value={trackProgress}
+              step="1"
+              min="0"
+              max={duration ? duration : `${duration}`}
+              className="progress"
+              onChange={(e) => onScrub(e.target.value)}
+              onMouseUp={onScrubEnd}
+              onKeyUp={onScrubEnd}
+              style={{ background: trackStyling }}
+            />
+          </div>
+        )}
         <Backdrop isPlaying={isPlaying} />
       </Container>
     )
@@ -189,17 +202,38 @@ const AudioPlayer = () => {
 };
 
 const Container = styled.div`
-  max-width: 350px;
-  padding: 24px;
-  border-radius: 20px;
+  font-family: 'Montserrat';
+  max-width: 50vw;
+  padding: 16px;
+  border-radius: 6px 6px 0 0;
   box-shadow: 0 28px 28px rgba(0, 0, 0, 0.2);
   margin: auto;
   color: #fff;
   border: 1px solid #fff;
+  display: flex;
+  align-items: center;
   background: #000;
   position: fixed;
   bottom: 0;
   right: 0;
+  transition: all 250ms ease-in-out;
+
+  .arrow {
+    z-index: 2;
+    position: ${({ isMoreShowing }) => (isMoreShowing ? 'absolute' : 'static')};
+
+    top: ${({ isMoreShowing }) => (isMoreShowing ? '10px' : 'inherit')};
+    left: ${({ isMoreShowing }) => (isMoreShowing ? '10px' : 'inherit')};
+
+    cursor: pointer;
+
+    transform: ${({ isMoreShowing }) =>
+      isMoreShowing ? 'rotate(180deg)' : '0'};
+
+    transition: transform 250ms ease-in-out;
+    font-size: 24px;
+    padding: ${({ isMoreShowing }) => (!isMoreShowing ? '6px' : '0')};
+  }
 
   button {
     background: none;
@@ -219,34 +253,43 @@ const Container = styled.div`
   }
 
   .artwork {
-    border-radius: 120px;
-    display: block;
+    border-radius: 50%;
+    /* display: block; */
     margin: auto;
-    height: 200px;
-    width: 200px;
+    height: 100px;
+    width: 100px;
+
+    animation-name: spin;
+    animation-duration: ${({ isPlaying }) => `${isPlaying ? '3000ms' : '0ms'}`};
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
   }
 
   .track-info {
     text-align: center;
     z-index: 1;
     position: relative;
+    /* display: flex;
+    align-items: center; */
   }
 
   .title {
     font-weight: 700;
-    margin-bottom: 4px;
+    margin-bottom: 0;
+    margin-top: 0;
   }
 
   .artist {
     font-weight: 300;
     margin-top: 0;
+    margin-bottom: 0;
   }
 
   .audio-controls {
     display: flex;
     justify-content: space-between;
     width: 75%;
-    margin: 0 auto 15px;
+    margin: 0 auto 0;
   }
 
   .audio-controls .prev svg,
@@ -263,6 +306,15 @@ const Container = styled.div`
 
   .audio-controls path {
     fill: #fff;
+  }
+
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
   }
 `;
 
