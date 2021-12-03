@@ -1,11 +1,25 @@
-import React, { useEffect, useRef, useCallback, useState } from 'react';
+import React, {
+  useEffect,
+  useRef,
+  useCallback,
+  useState,
+  useMemo,
+} from 'react';
 import { useAppContext } from '../../context/state';
+
+// components
 import AudioControls from './AudioControls';
 import Backdrop from './Backdrop';
+
+// utils
 import styled from 'styled-components';
+import { calculateSongTime } from '../../utils/timeUtils';
+
+// services
 import { getAllSongs } from '../../services/songs.services';
+
+// icons
 import { FaArrowUp as ArrowUp } from 'react-icons/fa';
-import Tooltip from '../shared/Tooltip/Tooltip';
 
 const AudioPlayer = () => {
   const [allSongs, setAllSongs] = useState(null);
@@ -76,6 +90,16 @@ const AudioPlayer = () => {
       }
     }, [1000]);
   };
+
+  const currentTrackTime = useMemo(() => {
+    return calculateSongTime(trackProgress);
+  }, [trackProgress]);
+
+  const songLength = useMemo(() => {
+    return calculateSongTime(
+      (audioRef?.current?.duration || song?.length) ?? 0
+    );
+  }, [audioRef?.current?.duration]);
 
   const onScrub = (value) => {
     // Clear any timers already running
@@ -167,16 +191,16 @@ const AudioPlayer = () => {
         className="audio-player"
         isPlaying={isPlaying}
         isMoreShowing={isMoreShowing}>
-        <Tooltip
+        {/* <Tooltip
           content="Tooltip text!"
           direction="top"
           delay={100}
-          position="absolute">
-          <ArrowUp
-            className="arrow"
-            onClick={() => setIsMoreShowing((prevState) => !prevState)}
-          />
-        </Tooltip>
+          position="absolute"> */}
+        <ArrowUp
+          className="arrow"
+          onClick={() => setIsMoreShowing((prevState) => !prevState)}
+        />
+        {/* </Tooltip> */}
 
         {isMoreShowing && (
           <div className="track-info">
@@ -193,18 +217,24 @@ const AudioPlayer = () => {
               onNextClick={toNextTrack}
               onPlayPauseClick={setIsPlaying}
             />
-            <input
-              type="range"
-              value={trackProgress}
-              step="1"
-              min="0"
-              max={duration ? duration : `${duration}`}
-              className="progress"
-              onChange={(e) => onScrub(e.target.value)}
-              onMouseUp={onScrubEnd}
-              onKeyUp={onScrubEnd}
-              style={{ background: trackStyling }}
-            />
+
+            <div style={{ display: 'flex', aligNitems: 'center' }}>
+              <div>{currentTrackTime}</div>
+              <input
+                type="range"
+                value={trackProgress}
+                step="1"
+                min="0"
+                max={duration ? duration : `${duration}`}
+                className="progress"
+                onChange={(e) => onScrub(e.target.value)}
+                onMouseUp={onScrubEnd}
+                onKeyUp={onScrubEnd}
+                style={{ background: trackStyling }}
+              />
+
+              <div>{songLength}</div>
+            </div>
           </div>
         )}
         <Backdrop isPlaying={isPlaying} />
@@ -231,15 +261,15 @@ const Container = styled.div`
   color: #fff;
   border: 1px solid #fff;
   background: #000;
-  transition: all 250ms ease-in-out;
+  /* transition: all 250ms ease-in-out; */
   min-height: 6px;
   min-width: 3px;
 
   @media screen and (max-width: 500px) {
     max-width: ${({ isMoreShowing }) => (isMoreShowing ? '100%' : '37px')};
-    padding: 0;
+    /* padding: 0; */
     margin: 0;
-    left: 0;
+    left: ${({ isMoreShowing }) => (isMoreShowing ? '0' : 'inherit')};
     min-height: 36px;
   }
 
