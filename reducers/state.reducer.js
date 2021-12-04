@@ -12,16 +12,26 @@ export default function stateReducer(state, action) {
       };
     }
 
-    case 'SET_SONG_PLAYING': {
+    case 'CLOSE_AUDIO_PLAYER': {
       return {
         ...state,
         audioPlayer: {
           isPlaying: false,
-          song: payload,
-          trackProgress: 0,
+          song: null,
         },
       };
     }
+
+    case 'SET_SONG_PLAYING': {
+      return {
+        ...state,
+        audioPlayer: {
+          isPlaying: payload._id,
+          song: payload,
+        },
+      };
+    }
+
     default:
       return state;
   }

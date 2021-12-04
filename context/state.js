@@ -1,4 +1,4 @@
-import { createContext, useContext, useReducer } from 'react';
+import { createContext, useContext, useReducer, useEffect } from 'react';
 import stateReducer from '../reducers/state.reducer';
 
 const AppContext = createContext();
@@ -8,7 +8,6 @@ export function AppStateProvider({ children }) {
     audioPlayer: {
       isPlaying: false,
       song: null,
-      trackProgress: 0,
     },
   };
 

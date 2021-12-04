@@ -1,12 +1,9 @@
 import styled from 'styled-components';
-import { useAppContext } from '../../context/state';
 import { getAllSongs } from '../../services/songs.services';
 import Head from 'next/head';
 import SongCard from '../../components/SongCard/SongCard';
 
 export default function Music({ allSongs }) {
-  const { dispatch } = useAppContext();
-
   return (
     <>
       <Head>
@@ -15,16 +12,7 @@ export default function Music({ allSongs }) {
       <Wrapper>
         <div className="songs__grid">
           {allSongs.map((song) => (
-            <SongCard
-              key={song._id}
-              song={song}
-              onClick={() =>
-                dispatch({
-                  type: 'SET_SONG_PLAYING',
-                  payload: song,
-                })
-              }
-            />
+            <SongCard key={song._id} song={song} />
           ))}
         </div>
       </Wrapper>

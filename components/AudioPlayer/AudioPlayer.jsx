@@ -1,30 +1,21 @@
-import React, {
-  useEffect,
-  useRef,
-  useCallback,
-  useState,
-  useMemo,
-} from 'react';
+import React, { useEffect, useCallback, useState, useRef } from 'react';
 import { useAppContext } from '../../context/state';
 
 // components
-import AudioControls from './AudioControls';
-import Backdrop from './Backdrop';
+import ReactPlayer from 'react-h5-audio-player';
+import 'react-h5-audio-player/lib/styles.css';
 
 // utils
 import styled from 'styled-components';
-import { calculateSongTime } from '../../utils/timeUtils';
 
 // services
 import { getAllSongs } from '../../services/songs.services';
-
-// icons
-import { FaArrowUp as ArrowUp } from 'react-icons/fa';
+import { FaWindowClose } from 'react-icons/fa';
+import Tooltip from './../shared/Tooltip/Tooltip';
 
 const AudioPlayer = () => {
   const [allSongs, setAllSongs] = useState(null);
-  const [isMoreShowing, setIsMoreShowing] = useState(true);
-  const [volume, setVolume] = useState(1);
+  const player = useRef();
 
   useEffect(() => {
     const fetchSongs = async () => {
@@ -43,78 +34,17 @@ const AudioPlayer = () => {
     });
   }, []);
 
-  const setTrackProgress = useCallback((value) => {
-    dispatch({
-      type: 'SET_AUDIO_PLAYER',
-      payload: { key: 'trackProgress', value },
-    });
-  }, []);
-
   const setSong = useCallback((value) => {
     dispatch({ type: 'SET_SONG_PLAYING', payload: value });
-  });
+  }, []);
 
-  const { isPlaying, song, trackProgress } = audioPlayer;
+  const handleClose = useCallback(() => {
+    dispatch({ type: 'CLOSE_AUDIO_PLAYER' });
+  }, []);
 
-  const {
-    title = '',
-    artist = '',
-    imgUrl: image = '',
-    audioSrc = '',
-  } = song || {};
+  const { song, isPlaying } = audioPlayer;
 
-  // Refs
-  const audioRef = useRef();
-  const intervalRef = useRef();
-  const isReady = useRef(false);
-
-  // Destructure for conciseness
-  const { duration = 0 } = audioRef.current || {};
-
-  const currentPercentage = duration
-    ? `${(trackProgress / duration) * 100}%`
-    : '0%';
-  const trackStyling = `
-    -webkit-gradient(linear, 0% 0%, 100% 0%, color-stop(${currentPercentage}, #fff), color-stop(${currentPercentage}, #777))
-  `;
-
-  const startTimer = () => {
-    // Clear any timers already running
-    clearInterval(intervalRef.current);
-
-    intervalRef.current = setInterval(() => {
-      if (audioRef.current.ended) {
-        toNextTrack();
-      } else {
-        setTrackProgress(audioRef.current.currentTime);
-      }
-    }, [1000]);
-  };
-
-  const currentTrackTime = useMemo(() => {
-    return calculateSongTime(trackProgress);
-  }, [trackProgress]);
-
-  const songLength = useMemo(() => {
-    return calculateSongTime(
-      (audioRef?.current?.duration || song?.length) ?? 0
-    );
-  }, [audioRef?.current?.duration]);
-
-  const onScrub = (value) => {
-    // Clear any timers already running
-    clearInterval(intervalRef.current);
-    audioRef.current.currentTime = value;
-    setTrackProgress(audioRef.current.currentTime);
-  };
-
-  const onScrubEnd = () => {
-    // If not already playing, start
-    if (!isPlaying) {
-      setIsPlaying(true);
-    }
-    startTimer();
-  };
+  const { title = '', artist = '', imgUrl = '', audioSrc = '' } = song || {};
 
   const toPrevTrack = () => {
     const currentSongIndex = allSongs.findIndex((s) => s.audioSrc === audioSrc);
@@ -141,235 +71,55 @@ const AudioPlayer = () => {
   };
 
   useEffect(() => {
-    // set audioRef on mount
-    audioRef.current = new Audio(audioSrc);
-  }, []);
-
-  useEffect(() => {
-    audioRef.current.volume = volume;
-  }, [volume]);
-
-  useEffect(() => {
-    if (isPlaying) {
-      audioRef.current.play();
-      startTimer();
-    } else {
-      // pause when isPlaying is false.
-      audioRef.current.pause();
+    // if is being paused from other sources accessing global state (for example: SongCard)
+    if (!isPlaying && song?._id) {
+      player.current?.audio?.current?.pause();
     }
-  }, [isPlaying]);
-
-  // Handles cleanup and setup when changing tracks
-  useEffect(() => {
-    audioRef.current.pause();
-
-    audioRef.current = new Audio(audioSrc);
-    setTrackProgress(audioRef.current.currentTime);
-
-    if (isReady.current) {
-      audioRef.current.play();
-      setIsPlaying(true);
-      startTimer();
-    } else {
-      // Set the isReady ref as true for the next pass
-      isReady.current = true;
-    }
-  }, [song]);
-
-  useEffect(() => {
-    // Pause and clean up on unmount
-    return () => {
-      audioRef.current.pause();
-      clearInterval(intervalRef.current);
-    };
-  }, []);
+  }, [isPlaying, player.current?.audio?.current]);
 
   return (
-    song &&
-    audioRef.current && (
-      <Container
-        className="audio-player"
-        isPlaying={isPlaying}
-        isMoreShowing={isMoreShowing}>
-        {/* <Tooltip
-          content="Tooltip text!"
-          direction="top"
-          delay={100}
-          position="absolute"> */}
-        <ArrowUp
-          className="arrow"
-          onClick={() => setIsMoreShowing((prevState) => !prevState)}
+    song && (
+      <Container>
+        <FaWindowClose className="audio-player__close" onClick={handleClose} />
+        <ReactPlayer
+          ref={player}
+          autoPlay
+          src={audioSrc}
+          onPlay={() => setIsPlaying(song?._id)}
+          onEnded={toNextTrack}
+          onClickNext={toNextTrack}
+          onClickPrevious={toPrevTrack}
+          onPause={() => setIsPlaying(false)}
+          showSkipControls
+          className="audio-player"
         />
-        {/* </Tooltip> */}
-
-        {isMoreShowing && (
-          <div className="track-info">
-            <img
-              className="artwork"
-              src={image}
-              alt={`track artwork for ${title} by ${artist}`}
-            />
-            <h2 className="title">{title}</h2>
-            {/* <h3 className="artist">{artist}</h3> */}
-            <AudioControls
-              isPlaying={isPlaying}
-              onPrevClick={toPrevTrack}
-              onNextClick={toNextTrack}
-              onPlayPauseClick={setIsPlaying}
-            />
-
-            <div style={{ display: 'flex', aligNitems: 'center' }}>
-              <div>{currentTrackTime}</div>
-              <input
-                type="range"
-                value={trackProgress}
-                step="1"
-                min="0"
-                max={duration ? duration : `${duration}`}
-                className="progress"
-                onChange={(e) => onScrub(e.target.value)}
-                onMouseUp={onScrubEnd}
-                onKeyUp={onScrubEnd}
-                style={{ background: trackStyling }}
-              />
-
-              <div>{songLength}</div>
-            </div>
-          </div>
-        )}
-        <Backdrop isPlaying={isPlaying} />
       </Container>
     )
   );
 };
 
 const Container = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
+  /* TODO: make it look more like soundcloud player (thinner, uses less space, but still same functionality.) */
+  background: #ffffff;
   position: fixed;
   bottom: 0;
   right: 0;
+  width: 100vw;
 
   font-family: 'Montserrat';
-  max-width: 350px;
 
-  padding: 16px;
-  border-radius: 6px 6px 0 0;
-  box-shadow: 0 28px 28px rgba(0, 0, 0, 0.2);
-  color: #fff;
-  border: 1px solid #fff;
-  background: #000;
-  /* transition: all 250ms ease-in-out; */
-  min-height: 6px;
-  min-width: 3px;
-
-  @media screen and (max-width: 500px) {
-    max-width: ${({ isMoreShowing }) => (isMoreShowing ? '100%' : '37px')};
-    /* padding: 0; */
-    margin: 0;
-    left: ${({ isMoreShowing }) => (isMoreShowing ? '0' : 'inherit')};
-    min-height: 36px;
-  }
-
-  .arrow {
-    z-index: 2;
-    position: ${({ isMoreShowing }) => (isMoreShowing ? 'absolute' : 'static')};
-
-    top: ${({ isMoreShowing }) => (isMoreShowing ? '10px' : 'inherit')};
-    left: ${({ isMoreShowing }) => (isMoreShowing ? '10px' : 'inherit')};
-
+  .audio-player__close {
     cursor: pointer;
-
-    transform: ${({ isMoreShowing }) =>
-      isMoreShowing ? 'rotate(180deg)' : '0'};
-
-    transition: transform 250ms ease-in-out;
-    font-size: 24px;
-    padding: ${({ isMoreShowing }) => (!isMoreShowing ? '6px' : '0')};
+    z-index: 999;
+    color: red;
+    position: absolute;
+    font-size: 30px;
+    top: -2px;
+    right: 0;
   }
 
-  button {
-    background: none;
-    border: none;
-    cursor: pointer;
-  }
-
-  input[type='range'] {
-    height: 5px;
-    -webkit-appearance: none;
-    width: 100%;
-    margin-bottom: 10px;
-    border-radius: 8px;
-    background: #3b7677;
-    transition: background 0.2s ease;
-    cursor: pointer;
-  }
-
-  .artwork {
-    border-radius: 50%;
-    /* display: block; */
-    margin: auto;
-    height: 100px;
-    width: 100px;
-
-    animation-name: spin;
-    animation-duration: ${({ isPlaying }) => `${isPlaying ? '3000ms' : '0ms'}`};
-    animation-iteration-count: infinite;
-    animation-timing-function: linear;
-  }
-
-  .track-info {
-    text-align: center;
-    z-index: 1;
-    position: relative;
-    /* display: flex;
-    align-items: center; */
-  }
-
-  .title {
-    font-weight: 700;
-    margin-bottom: 5px;
-    margin-top: 5px;
-  }
-
-  .artist {
-    font-weight: 300;
-    margin-top: 0;
-    margin-bottom: 0;
-  }
-
-  .audio-controls {
-    display: flex;
-    justify-content: space-between;
-    width: 75%;
-    margin: 0 auto 0;
-  }
-
-  .audio-controls .prev svg,
-  .audio-controls .next svg {
-    width: 35px;
-    height: 35px;
-  }
-
-  .audio-controls .play svg,
-  .audio-controls .pause svg {
-    height: 40px;
-    width: 40px;
-  }
-
-  .audio-controls path {
-    fill: #fff;
-  }
-
-  @keyframes spin {
-    from {
-      transform: rotate(0deg);
-    }
-    to {
-      transform: rotate(360deg);
-    }
+  * > .rhap_progress-section {
+    margin-top: 20px;
   }
 `;
 
