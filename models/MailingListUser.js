@@ -17,6 +17,7 @@ const MailingListUserSchema = new Schema(
     email: {
       type: String,
       required: [true, 'Email address is required'],
+      unique: true,
     },
 
     // textfield

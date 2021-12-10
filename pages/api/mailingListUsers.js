@@ -14,7 +14,14 @@ export default async function handler(req, res) {
         ); /* create a new model in the database */
         res.status(201).json({ success: true, data: newUser });
       } catch (error) {
-        res.status(400).json({ success: false, error });
+        if (error.keyValue.email !== null && error.code === 11000) {
+          res.status(400).json({
+            success: false,
+            error: 'Error: email address already exists.',
+          });
+        } else {
+          res.status(400).json({ success: false, error: error.message });
+        }
       }
       break;
     default:
