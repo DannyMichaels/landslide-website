@@ -1,3 +1,4 @@
+import { isEmail } from 'validator';
 import mongoose from 'mongoose';
 
 const Schema = mongoose.Schema;
@@ -16,8 +17,9 @@ const MailingListUserSchema = new Schema(
 
     email: {
       type: String,
-      required: [true, 'Email address is required'],
       unique: true,
+      required: [true, 'Email address is required'],
+      validate: [isEmail, 'invalid email'],
     },
 
     // textfield

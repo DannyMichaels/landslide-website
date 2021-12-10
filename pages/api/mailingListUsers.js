@@ -14,7 +14,7 @@ export default async function handler(req, res) {
         ); /* create a new model in the database */
         res.status(201).json({ success: true, data: newUser });
       } catch (error) {
-        if (error.keyValue.email !== null && error.code === 11000) {
+        if (error.keyValue?.email !== null && error?.code === 11000) {
           res.status(400).json({
             success: false,
             error: 'Error: email address already exists.',
