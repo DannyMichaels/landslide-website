@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { getAllSongs } from '../../services/songs.services';
 import Head from 'next/head';
 import SongCard from '../../components/SongCard/SongCard';
+import NavSpacer from '../../components/shared/Layout/NavSpacer';
 
 export default function Music({ allSongs }) {
   return (
@@ -9,6 +10,7 @@ export default function Music({ allSongs }) {
       <Head>
         <title>Landslide | Music</title>
       </Head>
+      <NavSpacer />
       <Wrapper>
         <div className="songs__grid">
           {allSongs.map((song) => (
@@ -28,10 +30,12 @@ export async function getServerSideProps() {
 
 const Wrapper = styled.div`
   max-width: 1100px;
-  margin: 20px auto;
+  margin-left: auto;
+  margin-right: auto;
   padding: 15px;
 
   .songs__grid {
+    margin-top: 20px;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(100%, 1fr));
     align-items: center;
