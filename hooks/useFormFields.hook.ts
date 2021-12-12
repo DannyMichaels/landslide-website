@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-export default function useFormFields(initialState: Object) {
+export default function useFormFields(initialState: any) {
   const [fields, setValues] = useState(initialState);
 
   const handleChange = (e: { target: HTMLInputElement }) => {

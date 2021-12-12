@@ -1,14 +1,8 @@
 import { useState, useCallback } from 'react';
 import { AsyncFunction } from '../types/AsyncFunction';
+import UseFormSubmit from '../types/UseFormSubmit';
 
-type OnSubmitFn = AsyncFunction<[string], any>;
-
-interface UseFormSubmit {
-  isSent: boolean;
-  submitLoading: boolean;
-  submitError: Error | null;
-  handleSubmit: AsyncFunction<null, null>;
-}
+type OnSubmitFn = AsyncFunction<[string], { error?: string }>;
 
 export default function useFormSubmit(onSubmit: OnSubmitFn): UseFormSubmit {
   if (!onSubmit) {
@@ -22,14 +16,23 @@ export default function useFormSubmit(onSubmit: OnSubmitFn): UseFormSubmit {
   const handleSubmit = useCallback(async () => {
     try {
       setSubmitLoading(true);
-      await onSubmit();
+      const { error = '' } = await onSubmit();
+
+      if (error) {
+        setIsSent(false);
+        setSubmitError(error);
+      } else {
+        setIsSent(true);
+      }
+
       setSubmitLoading(false);
-      setIsSent(true);
     } catch (error) {
       setSubmitError(error);
       setSubmitLoading(false);
       setIsSent(false);
     }
+
+    return null;
   }, [onSubmit]);
 
   return { isSent, submitLoading, submitError, handleSubmit };

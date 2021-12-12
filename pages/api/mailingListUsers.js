@@ -20,7 +20,9 @@ export default async function handler(req, res) {
             error: 'Error: email address already exists.',
           });
         } else {
-          res.status(400).json({ success: false, error: error.message });
+          res
+            .status(400)
+            .json({ success: false, error: formatErrorMessage(error.message) });
         }
       }
       break;
@@ -29,3 +31,7 @@ export default async function handler(req, res) {
       break;
   }
 }
+
+const formatErrorMessage = (errMsg) => {
+  return errMsg.replace('MailingListUser validation failed: ', '');
+};
