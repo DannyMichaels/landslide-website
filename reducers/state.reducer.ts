@@ -1,4 +1,11 @@
-export default function stateReducer(state, action) {
+import TState from '../types/_state';
+
+interface Action {
+  payload: any;
+  type: string;
+}
+
+export default function stateReducer(state: TState, action: Action) {
   const { type, payload } = action;
 
   switch (type) {

@@ -76,6 +76,14 @@ const AudioPlayer = () => {
     // if is being paused from other sources accessing global state (for example: SongCard)
     if (!isPlaying && song?._id) {
       player.current?.audio?.current?.pause();
+      console.log(player.current?.audio?.current.paused);
+    } else if (
+      // if user re-clicked the songcard and the audio is paused, unpause it
+      isPlaying &&
+      song?._id &&
+      player.current?.audio?.current.paused
+    ) {
+      player.current?.audio?.current?.play();
     }
   }, [isPlaying, player.current?.audio?.current]);
 
