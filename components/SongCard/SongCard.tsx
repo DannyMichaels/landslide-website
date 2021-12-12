@@ -16,10 +16,6 @@ export default function SongCard({ song = null }: { song: TSong }) {
     [audioPlayer.isPlaying, song?._id]
   );
 
-  if (!song) {
-    return new Error('Song not provided!, at SongCard.jsx');
-  }
-
   const handleClick = useCallback(() => {
     if (!isPlaying) {
       dispatch({

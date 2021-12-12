@@ -229,10 +229,10 @@ const Form = styled.form`
         text-transform: uppercase;
       }
     }
-  }
 
-  select {
-    text-transform: uppercase;
+    select {
+      text-transform: uppercase;
+    }
   }
 
   button[type='submit'] {
@@ -273,11 +273,11 @@ const Form = styled.form`
     align-items: center;
     justify-content: center;
     margin-bottom: 20px;
-    
+
     h1 {
       margin-top: 0;
-      font-family: 1.4rem;
-      color #fff;
+      font-size: 1.4rem;
+      color: #fff;
       font-family: 'Montserrat', sans-serif;
       text-transform: uppercase;
     }

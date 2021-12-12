@@ -1,12 +1,10 @@
 import styled from 'styled-components';
 import Image from 'next/image';
 import ScrollForMore from '../buttons/ScrollForMore';
-import Head from 'next/head';
 
 export default function Hero() {
   return (
     <>
-      <Head></Head>
       <Container>
         <div className="overlay">
           <h1>Landslide</h1>
