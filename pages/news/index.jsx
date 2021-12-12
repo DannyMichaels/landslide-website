@@ -1,6 +1,7 @@
 import dbConnect from '../../lib/dbConnect';
 import Post from '../../models/Post';
 
+// TODO
 export default function Posts({ allPosts }) {
   return <>{JSON.stringify(allPosts)}</>;
 }

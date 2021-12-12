@@ -3,6 +3,8 @@ import { getAllSongs } from '../../services/songs.services';
 import Head from 'next/head';
 import SongCard from '../../components/SongCard/SongCard';
 import NavSpacer from '../../components/shared/Layout/NavSpacer';
+import { GetServerSideProps } from 'next';
+import TSong from './../../types/_Song';
 
 export default function Music({ allSongs }) {
   return (
@@ -13,7 +15,7 @@ export default function Music({ allSongs }) {
       <NavSpacer />
       <Wrapper>
         <div className="songs__grid">
-          {allSongs.map((song) => (
+          {allSongs.map((song: TSong) => (
             <SongCard key={song._id} song={song} />
           ))}
         </div>
@@ -22,11 +24,11 @@ export default function Music({ allSongs }) {
   );
 }
 
-export async function getServerSideProps() {
+export const getServerSideProps: GetServerSideProps = async () => {
   const allSongs = await getAllSongs();
 
   return { props: { allSongs } };
-}
+};
 
 const Wrapper = styled.div`
   max-width: 1100px;
