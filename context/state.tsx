@@ -1,10 +1,15 @@
-import { createContext, useContext, useReducer, useEffect } from 'react';
+import { createContext, useContext, useReducer } from 'react';
 import stateReducer from '../reducers/state.reducer';
+import TAudioPlayer from '../types/_AudioPlayer';
 
-const AppContext = createContext();
+const AppContext = createContext(null);
+
+interface TState {
+  audioPlayer: TAudioPlayer;
+}
 
 export function AppStateProvider({ children }) {
-  const initialState = {
+  const initialState: TState = {
     audioPlayer: {
       isPlaying: false,
       song: null,
