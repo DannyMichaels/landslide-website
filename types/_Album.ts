@@ -7,4 +7,5 @@ export default interface TAlbum {
   recordLabel?: string;
   songs: TSong[];
   atrist: string;
+  _id: string;
 }

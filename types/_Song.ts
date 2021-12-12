@@ -9,4 +9,5 @@ export default interface TSong {
   _album: TAlbum;
   artist: string;
   bpm: number;
+  _id: string;
 }

@@ -2,11 +2,14 @@ import { useMemo, useCallback } from 'react';
 import styled from 'styled-components';
 import { useAppContext } from '../../context/state';
 import { FaPauseCircle, FaPlayCircle } from 'react-icons/fa';
+import TSong from './../../types/_Song';
+import TAudioPlayer from '../../types/_AudioPlayer';
 
-export default function SongCard({ song = null }) {
+export default function SongCard({ song = null }: { song: TSong }) {
   const { audioPlayer, dispatch } = useAppContext();
 
-  const { song: currentPlayingSong = {} } = audioPlayer;
+  const { song: currentPlayingSong = {} }: TAudioPlayer | { song: TSong | {} } =
+    audioPlayer;
 
   const isPlaying = useMemo(
     () => audioPlayer.isPlaying === song?._id,
@@ -54,7 +57,7 @@ const Container = styled.div`
   font-family: 'Open Sans', sans-serif;
   position: relative;
 
-  background-image: ${({ imgUrl }) =>
+  background-image: ${({ imgUrl }: { imgUrl: string }) =>
     `url(${imgUrl}), linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5))`};
   background-position: center;
   background-size: cover;
