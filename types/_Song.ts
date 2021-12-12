@@ -6,8 +6,10 @@ export default interface TSong {
   imgUrl: string;
   description?: string;
   recordLabel?: string;
-  _album: TAlbum;
+  _album?: TAlbum;
   artist: string;
   bpm: number;
+  length?: string;
   _id: string;
+  isSingle: boolean;
 }

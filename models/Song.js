@@ -47,6 +47,12 @@ const SongSchema = new Schema(
       type: Number,
     },
 
+    isSingle: {
+      // is the song a part of an album or a single release?
+      type: Boolean,
+      default: false,
+    },
+
     musicStoreUrls: {
       type: [
         {

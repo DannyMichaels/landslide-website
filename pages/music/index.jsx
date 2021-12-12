@@ -41,10 +41,12 @@ const Wrapper = styled.div`
     align-items: center;
     justify-content: center;
     gap: 20px;
+    overflow-y: auto;
 
-    @media screen and (min-width: 501px) {
+    @media screen and (min-width: 651px) {
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       padding: 40px;
+      max-height: 100vh;
     }
   }
 `;

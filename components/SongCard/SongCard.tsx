@@ -64,8 +64,11 @@ const Container = styled.div`
   background-repeat: no-repeat;
   background-blend-mode: overlay;
 
-  @media screen and (min-width: 501px) {
+  max-height: 240px;
+
+  @media screen and (min-width: 651px) {
     width: 250px;
+    max-height: 250px;
   }
 
   .song__title {
