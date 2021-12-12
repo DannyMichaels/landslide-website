@@ -2,7 +2,7 @@ import { useState, useCallback } from 'react';
 import { AsyncFunction } from '../types/AsyncFunction';
 import UseFormSubmit from '../types/UseFormSubmit';
 
-type OnSubmitFn = AsyncFunction<[string], { error?: string }>;
+type OnSubmitFn = AsyncFunction<[string], { error?: string; success: boolean }>;
 
 export default function useFormSubmit(onSubmit: OnSubmitFn): UseFormSubmit {
   if (!onSubmit) {
@@ -13,27 +13,32 @@ export default function useFormSubmit(onSubmit: OnSubmitFn): UseFormSubmit {
   const [submitLoading, setSubmitLoading] = useState(false);
   const [submitError, setSubmitError] = useState(null);
 
-  const handleSubmit = useCallback(async () => {
-    try {
-      setSubmitLoading(true);
-      const { error = '' } = await onSubmit();
+  const handleSubmit = useCallback(
+    async (e: Event) => {
+      e.preventDefault();
 
-      if (error) {
-        setIsSent(false);
+      try {
+        setSubmitLoading(true);
+        const { error = '', success } = await onSubmit();
+
+        if (error) {
+          setIsSent(false);
+          setSubmitError(error);
+        } else {
+          setIsSent(success);
+        }
+
+        setSubmitLoading(false);
+      } catch (error) {
         setSubmitError(error);
-      } else {
-        setIsSent(true);
+        setSubmitLoading(false);
+        setIsSent(false);
       }
 
-      setSubmitLoading(false);
-    } catch (error) {
-      setSubmitError(error);
-      setSubmitLoading(false);
-      setIsSent(false);
-    }
-
-    return null;
-  }, [onSubmit]);
+      return null;
+    },
+    [onSubmit]
+  );
 
   return { isSent, submitLoading, submitError, handleSubmit };
 }

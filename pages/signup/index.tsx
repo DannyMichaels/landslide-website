@@ -3,6 +3,8 @@ import useFormSubmit from '../../hooks/useFormSubmit.hook';
 import UseFormSubmit from '../../types/UseFormSubmit';
 import { useCallback } from 'react';
 import { postNewMailingListUser } from '../../services/mailingListUsers.services';
+import TMailingListUser from '../../types/_MailingListUser';
+import US_STATES from '../../json/US_STATES.json';
 
 // join mailing list
 export default function Signup() {
@@ -19,46 +21,54 @@ export default function Signup() {
     zipCode: '',
   });
 
-  const onSubmit = useCallback(async () => {
-    let payload = createPayload(fields);
-
+  const onSubmit = useCallback(async (): Promise<{
+    error: string;
+    success: boolean;
+  }> => {
     const {
       success,
       newUser,
       error = '',
-    } = await postNewMailingListUser(payload);
+    } = await postNewMailingListUser(fields);
 
-    return { error };
+    return { error, success };
   }, [fields]);
 
   const { isSent, submitLoading, submitError, handleSubmit }: UseFormSubmit =
     useFormSubmit(onSubmit);
 
+  const { firstName, lastName, email, city, state, country, zipCode } = fields;
+
   return (
-    <div>
-      <button onClick={handleSubmit}>submit</button>
-    </div>
+    <form onSubmit={handleSubmit}>
+      <div className="form__column">
+        <input name="firstName" value={firstName} onChange={handleChange} />
+        <input name="lastName" value={lastName} onChange={handleChange} />
+        <input
+          placeholder="email"
+          name="email"
+          type="email"
+          required
+          value={email}
+          onChange={handleChange}
+        />
+        <input name="city" value={city} onChange={handleChange} />
+
+        <select name="state" value={state} onChange={handleChange}>
+          {Object.entries(US_STATES).map(([abbreviation, name]) => (
+            <option value={abbreviation}>{name}</option>
+          ))}
+        </select>
+
+        <input
+          name="country"
+          value={country}
+          required
+          onChange={handleChange}
+        />
+        <input name="zipCode" value={zipCode} onChange={handleChange} />
+      </div>
+      <button type="submit">submit</button>
+    </form>
   );
-}
-
-interface FormFields {
-  firstName: string;
-  lastName: string;
-  email: string;
-  city: string;
-  state: string;
-  country: string;
-  zipCode: string;
-}
-
-function createPayload(fields: FormFields) {
-  let payload = {};
-
-  for (const [key, value] of Object.entries(fields)) {
-    if (value !== '') {
-      payload[key] = value;
-    }
-  }
-
-  return payload;
 }
