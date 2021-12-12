@@ -1,4 +1,4 @@
-import useFormFields from '../../hooks/useFormFields.hook.ts';
+import useFormFields from '../../hooks/useFormFields.hook';
 
 // join mailing list
 export default function Signup() {
