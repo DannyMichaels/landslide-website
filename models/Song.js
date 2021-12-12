@@ -9,6 +9,11 @@ const SongSchema = new Schema(
       required: [true, 'Please provide a title for this song'],
     },
 
+    audioSrc: {
+      type: String,
+      required: [true, 'Please provide a audioSrc for this song'],
+    },
+
     imgUrl: {
       type: String,
       required: [true, 'Please provide a image for this song'],

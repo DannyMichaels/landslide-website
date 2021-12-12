@@ -11,11 +11,13 @@ import styled from 'styled-components';
 // services
 import { getAllSongs } from '../../services/songs.services';
 import { FaWindowClose } from 'react-icons/fa';
-import Tooltip from './../shared/Tooltip/Tooltip';
+
+// types
+import TSong from '../../types/_Song';
 
 const AudioPlayer = () => {
-  const [allSongs, setAllSongs] = useState(null);
-  const player = useRef();
+  const [allSongs, setAllSongs] = useState<Array<TSong>>([]);
+  const player = useRef<any>();
 
   useEffect(() => {
     const fetchSongs = async () => {
