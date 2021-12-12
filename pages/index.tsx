@@ -1,6 +1,8 @@
 import Head from 'next/head';
 import styled from 'styled-components';
-import Hero from '../components/Home/Hero';
+import dynamic from 'next/dynamic';
+
+const Hero = dynamic(() => import('../components/Home/Hero'));
 
 export default function Home() {
   return (
