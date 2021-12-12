@@ -1,7 +1,11 @@
+import type { NextApiRequest, NextApiResponse } from 'next';
 import dbConnect from '../../lib/dbConnect';
 import MailingListUser from '../../models/MailingListUser';
 
-export default async function handler(req, res) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   const { method } = req;
 
   await dbConnect();
@@ -32,7 +36,7 @@ export default async function handler(req, res) {
   }
 }
 
-const formatErrorMessage = (errMsg) => {
+const formatErrorMessage = (errMsg: string) => {
   const string = errMsg.includes('email:') ? 'email:' : '';
 
   return errMsg.replace(`MailingListUser validation failed: ${string}`, '');
