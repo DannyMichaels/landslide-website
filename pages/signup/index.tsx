@@ -49,81 +49,96 @@ export default function Signup() {
         {submitError && <div className="form__error">Error: {submitError}</div>}
 
         {!isSent ? (
-          <div className="form__inputs">
-            <label htmlFor="firstName">
-              First Name{createAsterisk(firstName)}
-            </label>
-            <input
-              name="firstName"
-              placeholder="First Name"
-              required
-              value={firstName}
-              onChange={handleChange}
-            />
-            <label htmlFor="lastName">Last Name</label>
+          <>
+            <div className="form__title">
+              <h1>Sign Up</h1>
+            </div>
 
-            <input
-              name="lastName"
-              placeholder="Last Name"
-              value={lastName}
-              onChange={handleChange}
-            />
+            <div className="form__inputs">
+              <label htmlFor="firstName">
+                First Name{createAsterisk(firstName)}
+              </label>
+              <input
+                name="firstName"
+                placeholder="First Name"
+                required
+                value={firstName}
+                onChange={handleChange}
+              />
+              <label htmlFor="lastName">Last Name</label>
 
-            <label htmlFor="email">Email{createAsterisk(email)}</label>
+              <input
+                name="lastName"
+                placeholder="Last Name"
+                value={lastName}
+                onChange={handleChange}
+              />
 
-            <input
-              placeholder="Email"
-              name="email"
-              type="email"
-              required
-              value={email}
-              onChange={handleChange}
-            />
+              <label htmlFor="email">Email{createAsterisk(email)}</label>
 
-            <label htmlFor="city">City</label>
+              <input
+                placeholder="Email"
+                name="email"
+                type="email"
+                required
+                value={email}
+                onChange={handleChange}
+              />
 
-            <input
-              name="city"
-              placeholder="City"
-              value={city}
-              onChange={handleChange}
-            />
+              <label htmlFor="city">City</label>
 
-            <label htmlFor="state">State</label>
+              <input
+                name="city"
+                placeholder="City"
+                value={city}
+                onChange={handleChange}
+              />
 
-            <select name="state" value={state} onChange={handleChange}>
-              {Object.entries(US_STATES).map(
-                ([stateAbbreviation, fullStateName]) => (
-                  <option key={stateAbbreviation} value={stateAbbreviation}>
-                    {fullStateName}
-                  </option>
-                )
+              <label htmlFor="state">State</label>
+
+              <select name="state" value={state} onChange={handleChange}>
+                <option value="N/A">N/A</option>
+                {Object.entries(US_STATES).map(
+                  ([stateAbbreviation, fullStateName]) => (
+                    <option key={stateAbbreviation} value={stateAbbreviation}>
+                      {fullStateName}
+                    </option>
+                  )
+                )}
+              </select>
+
+              {state === 'N/A' && (
+                <>
+                  <label htmlFor="country">
+                    Country{createAsterisk(country)}
+                  </label>
+
+                  <select
+                    placeholder="Country"
+                    name="country"
+                    value={country}
+                    required
+                    onChange={handleChange}>
+                    <option value="N/A">N/A</option>
+
+                    {WORLD_COUNTRIES.map(({ name }) => (
+                      <option value={name}>{name}</option>
+                    ))}
+                  </select>
+                </>
               )}
-            </select>
 
-            <label htmlFor="country">Country{createAsterisk(country)}</label>
+              <label htmlFor="zipCode">Zip Code</label>
 
-            <select
-              placeholder="Country"
-              name="country"
-              value={country}
-              required
-              onChange={handleChange}>
-              {WORLD_COUNTRIES.map(({ name }) => (
-                <option value={name}>{name}</option>
-              ))}
-            </select>
-
-            <label htmlFor="zipCode">Zip Code</label>
-
-            <input
-              placeholder="Zip Code"
-              name="zipCode"
-              value={zipCode}
-              onChange={handleChange}
-            />
-            <button type="submit">JOIN</button>
-          </div>
+              <input
+                placeholder="Zip Code"
+                name="zipCode"
+                value={zipCode}
+                onChange={handleChange}
+              />
+              <button type="submit">JOIN</button>
+            </div>
+          </>
         ) : (
           <div className="form__success">
             <h1>Thank you!</h1>
@@ -240,9 +255,24 @@ const Form = styled.form`
       font-size: 1.4rem;
     }
   }
+
+  .form__title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    
+    h1 {
+      margin-top: 0;
+      font-family: 1.4rem;
+      color #fff;
+      font-family: 'Montserrat', sans-serif;
+      text-transform: uppercase;
+    }
+  }
 `;
 
-const createAsterisk = (str: string) => {
+function createAsterisk(str: string) {
   if (str !== '') return '';
   return '*';
-};
+}
