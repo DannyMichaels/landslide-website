@@ -7,7 +7,6 @@ export default function Home() {
     <div className="container">
       <Head>
         <title>Landslide</title>
-        <link rel="icon" href="/favicon.ico" />
       </Head>
       <Container>
         <Hero />

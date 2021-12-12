@@ -41,6 +41,7 @@ function App({ Component, pageProps }) {
           href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@1,300&family=Open+Sans&display=swap"
           rel="stylesheet"
         />
+        <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <AppStateProvider>

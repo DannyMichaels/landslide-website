@@ -7,6 +7,7 @@ import US_STATES from '../../json/US_STATES.json';
 import WORLD_COUNTRIES from '../../json/WORLD_COUNTRIES.json';
 import styled from 'styled-components';
 import NavSpacer from '../../components/shared/Layout/NavSpacer';
+import Head from 'next/head';
 
 // join mailing list
 export default function Signup() {
@@ -43,6 +44,17 @@ export default function Signup() {
 
   return (
     <>
+      <Head>
+        <title>Signup | Landslide</title>
+        <meta name="description" content="Join the mailing list!" />
+        <meta property="og:title" content="Signup | Landslide" data-rh="true" />
+        <meta
+          property="og:description"
+          content="Join the mailing list!"
+          data-rh="true"
+        />
+      </Head>
+
       <NavSpacer />
 
       <Form onSubmit={handleSubmit}>

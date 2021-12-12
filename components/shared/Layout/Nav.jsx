@@ -17,6 +17,11 @@ const LINKS = [
     text: 'music',
     route: '/music',
   },
+
+  {
+    text: 'sign up',
+    route: '/signup',
+  },
 ];
 
 export default function Nav() {
