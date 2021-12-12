@@ -26,6 +26,7 @@ export default function useFormSubmit(onSubmit: OnSubmitFn): UseFormSubmit {
           setSubmitError(error);
         } else {
           setIsSent(success);
+          setSubmitError('');
         }
 
         setSubmitLoading(false);

@@ -6,6 +6,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@types/styled-components": "^5.1.17",
     "axios": "^0.24.0",
     "isomorphic-unfetch": "^3.1.0",
     "mongodb": "^3.5.9",

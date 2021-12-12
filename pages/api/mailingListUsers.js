@@ -33,5 +33,7 @@ export default async function handler(req, res) {
 }
 
 const formatErrorMessage = (errMsg) => {
-  return errMsg.replace('MailingListUser validation failed: ', '');
+  const string = errMsg.includes('email:') ? 'email:' : '';
+
+  return errMsg.replace(`MailingListUser validation failed: ${string}`, '');
 };

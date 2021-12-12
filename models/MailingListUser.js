@@ -7,7 +7,7 @@ const MailingListUserSchema = new Schema(
   {
     firstName: {
       type: String,
-      required: false,
+      required: [true, 'First name is required'],
     },
 
     lastName: {
@@ -38,7 +38,7 @@ const MailingListUserSchema = new Schema(
     country: {
       type: String,
       required: true,
-      default: 'UNITED STATES',
+      default: 'United States',
     },
 
     // textfield
