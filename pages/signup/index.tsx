@@ -8,6 +8,7 @@ import WORLD_COUNTRIES from '../../json/WORLD_COUNTRIES.json';
 import styled from 'styled-components';
 import NavSpacer from '../../components/shared/Layout/NavSpacer';
 import Head from 'next/head';
+import ErrorBoundary from '../../components/ErrorBoundary/ErrorBoundary';
 
 // join mailing list
 export default function Signup() {
@@ -28,22 +29,18 @@ export default function Signup() {
     error: string;
     success: boolean;
   }> => {
-    const {
-      success,
-      newUser,
-      error = '',
-    } = await postNewMailingListUser(fields);
+    const { success, error = '' } = await postNewMailingListUser(fields);
 
     return { error, success };
   }, [fields]);
 
-  const { isSent, submitLoading, submitError, handleSubmit }: UseFormSubmit =
+  const { isSent, submitError, handleSubmit }: UseFormSubmit =
     useFormSubmit(onSubmit);
 
   const { firstName, lastName, email, city, state, country, zipCode } = fields;
 
   return (
-    <>
+    <ErrorBoundary>
       <Head>
         <title>Signup | Landslide</title>
         <meta name="description" content="Join the mailing list!" />
@@ -157,7 +154,7 @@ export default function Signup() {
           </div>
         )}
       </Form>
-    </>
+    </ErrorBoundary>
   );
 }
 
