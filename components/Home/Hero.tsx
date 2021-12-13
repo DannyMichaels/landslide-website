@@ -55,6 +55,7 @@ const Container = styled.div`
       letter-spacing: 0.45rem;
       font-weight: 700;
       font-family: 'Montserrat', sans-serif;
+      text-transform: uppercase;
     }
   }
 
