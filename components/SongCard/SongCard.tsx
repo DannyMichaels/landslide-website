@@ -3,13 +3,9 @@ import styled from 'styled-components';
 import { useAppContext } from '../../context/state';
 import { FaPauseCircle, FaPlayCircle } from 'react-icons/fa';
 import TSong from './../../types/_Song';
-import TAudioPlayer from '../../types/_AudioPlayer';
 
 export default function SongCard({ song = null }: { song: TSong }) {
   const { audioPlayer, dispatch } = useAppContext();
-
-  const { song: currentPlayingSong = {} }: TAudioPlayer | { song: TSong | {} } =
-    audioPlayer;
 
   const isPlaying = useMemo(
     () => audioPlayer.isPlaying === song?._id,
