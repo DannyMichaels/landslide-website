@@ -1,7 +1,7 @@
+import { useCallback } from 'react';
 import useFormFields from '../../hooks/useFormFields.hook';
 import useFormSubmit from '../../hooks/useFormSubmit.hook';
 import UseFormSubmit from '../../types/UseFormSubmit';
-import { useCallback } from 'react';
 import { postNewMailingListUser } from '../../services/mailingListUsers.services';
 import US_STATES from '../../json/US_STATES.json';
 import WORLD_COUNTRIES from '../../json/WORLD_COUNTRIES.json';
