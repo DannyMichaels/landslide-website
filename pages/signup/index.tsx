@@ -209,7 +209,7 @@ export default function Signup() {
             <div className="form__success">
               <h1>Thank you!</h1>
               <h2>{newUser?.email} has been added to the mailing list.</h2>
-              <button onClick={reset}>Go Back</button>
+              <button onClick={reset}>Go Back / Restart</button>
             </div>
           )}
         </Form>
