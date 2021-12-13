@@ -21,7 +21,7 @@ const AudioPlayer = () => {
 
   useEffect(() => {
     const fetchSongs = async () => {
-      const allSongs = await getAllSongs();
+      const allSongs = await getAllSongs('/api/mailingListUsers/');
       setAllSongs(allSongs);
     };
     fetchSongs();

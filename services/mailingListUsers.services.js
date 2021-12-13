@@ -5,16 +5,15 @@ let header = new Headers({
   'Content-Type': 'application/json',
 });
 
-export const postNewMailingListUser = async (body) => {
-  const baseURL = process.env.API_URL || 'http://localhost:3000/api';
-
+export const postNewMailingListUser = async (url, body) => {
   try {
-    const response = await fetch(`${baseURL}/mailingListUsers/`, {
+    const response = await fetch(url, {
       method: 'POST',
-      // headers: {
-      //   Accept: 'application/json',
-      //   'Content-Type': 'application/json',
-      // },
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+      },
       header,
       body: JSON.stringify(body),
     }).then((r) => r.json());
