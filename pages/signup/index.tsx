@@ -38,7 +38,7 @@ export default function Signup() {
       success,
       error = '',
       newUser,
-    } = await postNewMailingListUser('/api/mailingListUsers/', fields);
+    } = await postNewMailingListUser('/api/mailingListUsers', fields);
 
     if (newUser) {
       setNewUser(newUser);
