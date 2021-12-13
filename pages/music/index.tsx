@@ -5,8 +5,6 @@ import SongCard from '../../components/SongCard/SongCard';
 import NavSpacer from '../../components/shared/Layout/NavSpacer';
 import { GetServerSideProps } from 'next';
 import TSong from './../../types/_Song';
-import dbConnect from '../../lib/dbConnect';
-import Song from '../../models/Song';
 
 export default function Music({ allSongs }) {
   return (
@@ -27,14 +25,7 @@ export default function Music({ allSongs }) {
 }
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  await dbConnect();
-  const result = await Song.find({});
-
-  const allSongs = result.map((doc) => {
-    const song = doc.toObject();
-    song._id = song._id.toString();
-    return song;
-  });
+  const allSongs = await getAllSongs();
 
   return { props: { allSongs } };
 };
