@@ -9,6 +9,13 @@ export default function stateReducer(state: TState, action: Action) {
   const { type, payload } = action;
 
   switch (type) {
+    case 'SET_ALL_SONGS': {
+      return {
+        ...state,
+        allSongs: payload,
+        songsLoading: false,
+      };
+    }
     case 'SET_AUDIO_PLAYER': {
       return {
         ...state,

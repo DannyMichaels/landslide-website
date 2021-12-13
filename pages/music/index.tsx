@@ -1,14 +1,22 @@
 import styled from 'styled-components';
-import { getAllSongs } from '../../services/songs.services';
 import Head from 'next/head';
 import SongCard from '../../components/SongCard/SongCard';
 import NavSpacer from '../../components/shared/Layout/NavSpacer';
-import { GetServerSideProps } from 'next';
 import type TSong from '../../types/_Song';
-import Song from '../../models/Song';
-import dbConnect from '../../lib/dbConnect';
+import { useAppContext } from '../../context/state';
+import Loading from '../../components/shared/Loading/Loading';
 
-export default function Music({ allSongs }) {
+export default function Music() {
+  const { allSongs, songsLoading } = useAppContext();
+
+  const songsJSX = songsLoading ? (
+    <div className="songs__loading">
+      <Loading withText />
+    </div>
+  ) : (
+    allSongs.map((song: TSong) => <SongCard key={song._id} song={song} />)
+  );
+
   return (
     <>
       <Head>
@@ -16,29 +24,11 @@ export default function Music({ allSongs }) {
       </Head>
       <NavSpacer />
       <Wrapper>
-        <div className="songs__grid">
-          {allSongs.map((song: TSong) => (
-            <SongCard key={song._id} song={song} />
-          ))}
-        </div>
+        <div className="songs__grid">{songsJSX}</div>
       </Wrapper>
     </>
   );
 }
-
-export const getServerSideProps: GetServerSideProps = async () => {
-  await dbConnect();
-
-  const result = await Song.find({});
-
-  const allSongs = result.map((doc) => {
-    const song = doc.toObject();
-    song._id = song._id.toString();
-    return song;
-  });
-
-  return { props: { allSongs } };
-};
 
 const Wrapper = styled.div`
   max-width: 1100px;
@@ -59,6 +49,21 @@ const Wrapper = styled.div`
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       padding: 40px;
       max-height: 100vh;
+    }
+  }
+
+  .songs__loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    h1 {
+      font-size: 2rem;
+      letter-spacing: 0.5rem;
+      font-family: 'Montserrat', sans-serif;
+
+      margin-bottom: 10px;
     }
   }
 `;

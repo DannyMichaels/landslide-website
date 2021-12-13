@@ -1,9 +1,8 @@
 import fetch from 'isomorphic-unfetch';
 
-export const getAllSongs = async () => {
-  const baseURL = process.env.API_URL || 'http://localhost:3000/api';
-
-  const response = await fetch(`${baseURL}/songs/`, {
+const baseURL = process.env.API_URL || 'http://localhost:3000/api';
+export const getAllSongs = async (url = baseURL) => {
+  const response = await fetch(url, {
     method: 'GET',
   }).then((r) => r.json());
 

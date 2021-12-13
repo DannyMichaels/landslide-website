@@ -12,22 +12,20 @@ import styled from 'styled-components';
 import { getAllSongs } from '../../services/songs.services';
 import { FaWindowClose } from 'react-icons/fa';
 
-// types
-import TSong from '../../types/_Song';
-
 const AudioPlayer = () => {
-  const [allSongs, setAllSongs] = useState<Array<TSong>>([]);
+  const { allSongs, audioPlayer, dispatch } = useAppContext();
+
   const player = useRef<any>();
 
   useEffect(() => {
     const fetchSongs = async () => {
-      const allSongs = await getAllSongs();
-      setAllSongs(allSongs);
+      // I'm client side rendering songs because SSR is SOOO SLOW on DEPLOYMENT
+      const allSongs = await getAllSongs('/api/songs');
+
+      dispatch({ type: 'SET_ALL_SONGS', payload: allSongs });
     };
     fetchSongs();
   }, []);
-
-  const { audioPlayer, dispatch } = useAppContext();
 
   const setIsPlaying = useCallback((value) => {
     dispatch({
