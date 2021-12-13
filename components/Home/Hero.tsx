@@ -15,7 +15,7 @@ export default function Hero() {
           className="img"
           src="/assets/hero.jpg"
           layout="fill"
-          blurDataURL="/assets/hero.jpg"
+          blurDataURL="/assets/image-blur.png"
           placeholder="blur"
           objectFit="contain"
           objectPosition="center"
@@ -33,10 +33,7 @@ export default function Hero() {
 const Container = styled.div`
   height: 100%;
   max-height: 80vh;
-
-  @media screen and (min-width: 1100px) {
-    min-height: 40vh;
-  }
+  min-height: 100%;
 
   position: relative;
   margin: 0 auto;
@@ -81,7 +78,7 @@ const Container = styled.div`
       object-fit: cover !important;
     }
 
-    opacity: 0.8;
+    opacity: 0.75;
   }
 
   .hero__scroll-for-more {
