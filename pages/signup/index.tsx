@@ -28,6 +28,8 @@ export default function Signup() {
 
   const [newUser, setNewUser] = useState<TMailingListUser>(null);
 
+  const [termsShowing, setTermsShowing] = useState(false);
+
   const onSubmit = useCallback(async (): Promise<{
     error: string;
     success: boolean;
@@ -180,7 +182,23 @@ export default function Signup() {
                   value={zipCode}
                   onChange={handleChange}
                 />
+
                 <button type="submit">JOIN</button>
+
+                <div className="terms__toggle">
+                  <u onClick={() => setTermsShowing((prevState) => !prevState)}>
+                    Terms
+                  </u>
+                </div>
+
+                <div className={`terms__text${termsShowing ? ' active' : ''}`}>
+                  By submitting my information, I agree to receive personalized
+                  updates and marketing messages about Landslide based on my
+                  information, interests, activities, website visits and device
+                  data and in accordance with the Privacy Policy. I understand
+                  that I can opt-out at any time by emailing
+                  LandslideEmailingService@gmail.com.
+                </div>
               </div>
             </>
           ) : (
@@ -340,6 +358,36 @@ const Form = styled.form`
       font-family: 'Montserrat', sans-serif;
       text-transform: uppercase;
     }
+  }
+
+  .terms__toggle {
+    text-align: right;
+    margin-top: 10px;
+
+    u {
+      cursor: pointer;
+      transition: color 250ms ease-in-out;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+
+      &:hover {
+        color: red;
+      }
+    }
+  }
+
+  .terms__text {
+    margin-top: 10px;
+    font-family: 'Montserrat', sans-serif;
+    max-height: 0;
+    overflow: hidden;
+    box-sizing: border-box;
+
+    &.active {
+      max-height: 172px;
+    }
+
+    transition: max-height 250ms ease-in-out;
   }
 `;
 
