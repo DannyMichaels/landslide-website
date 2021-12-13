@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 
 export default function useFormFields(initialState: any) {
   const [fields, setValues] = useState(initialState);
@@ -12,5 +12,9 @@ export default function useFormFields(initialState: any) {
     });
   };
 
-  return [fields, handleChange];
+  const resetFormFields = useCallback(() => {
+    setValues(initialState);
+  }, [initialState]);
+
+  return [fields, handleChange, resetFormFields];
 }
