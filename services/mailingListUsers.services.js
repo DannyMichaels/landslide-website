@@ -1,4 +1,4 @@
-// import fetch from 'isomorphic-unfetch';
+import fetch from 'isomorphic-unfetch';
 
 let header = new Headers({
   'Access-Control-Allow-Origin': '*',
@@ -11,6 +11,16 @@ export const postNewMailingListUser = async (body) => {
   try {
     const response = await fetch(`${baseURL}/mailingListUsers/`, {
       method: 'POST',
+      // headers: {
+      //   Accept: 'application/json',
+      //   'Content-Type': 'application/json',
+      //   'Access-Control-Allow-Origin': '*',
+      //   Origin: baseURL,
+      //   'access-control-allow-methods': 'GET',
+      // },
+      // header: {
+
+      // },
       header,
       body: JSON.stringify(body),
     }).then((r) => r.json());
