@@ -41,5 +41,11 @@ export default function useFormSubmit(onSubmit: OnSubmitFn): UseFormSubmit {
     [onSubmit]
   );
 
-  return { isSent, submitLoading, submitError, handleSubmit };
+  const resetSubmitState = useCallback(() => {
+    setSubmitError(null);
+    setSubmitLoading(false);
+    setIsSent(false);
+  }, []);
+
+  return { isSent, submitLoading, submitError, handleSubmit, resetSubmitState };
 }

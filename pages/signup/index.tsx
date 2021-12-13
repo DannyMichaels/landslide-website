@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useEffect, useCallback, useState } from 'react';
 import useFormFields from '../../hooks/useFormFields.hook';
 import useFormSubmit from '../../hooks/useFormSubmit.hook';
 import UseFormSubmit from '../../types/UseFormSubmit';
@@ -9,10 +9,11 @@ import styled from 'styled-components';
 import NavSpacer from '../../components/shared/Layout/NavSpacer';
 import Head from 'next/head';
 import ErrorBoundary from '../../components/ErrorBoundary/ErrorBoundary';
+import TMailingListUser from '../../types/_MailingListUser';
 
 // join mailing list
 export default function Signup() {
-  const [fields, handleChange] = useFormFields({
+  const [fields, handleChange, resetFormFields] = useFormFields({
     firstName: '',
     lastName: '',
     email: '',
@@ -25,19 +26,44 @@ export default function Signup() {
     zipCode: '',
   });
 
+  const [newUser, setNewUser] = useState<TMailingListUser>(null);
+
   const onSubmit = useCallback(async (): Promise<{
     error: string;
     success: boolean;
   }> => {
-    const { success, error = '' } = await postNewMailingListUser(fields);
+    const {
+      success,
+      error = '',
+      newUser,
+    } = await postNewMailingListUser(fields);
+
+    if (newUser) {
+      setNewUser(newUser);
+    }
 
     return { error, success };
   }, [fields]);
 
-  const { isSent, submitError, handleSubmit }: UseFormSubmit =
-    useFormSubmit(onSubmit);
+  const {
+    isSent,
+    submitError,
+    submitLoading,
+    handleSubmit,
+    resetSubmitState,
+  }: UseFormSubmit = useFormSubmit(onSubmit);
 
   const { firstName, lastName, email, city, state, country, zipCode } = fields;
+
+  useEffect(() => {
+    if (isSent) {
+      setTimeout(() => {
+        resetSubmitState();
+        resetFormFields();
+        setNewUser(null);
+      }, 3000);
+    }
+  }, [isSent]);
 
   return (
     <ErrorBoundary>
@@ -54,106 +80,117 @@ export default function Signup() {
 
       <NavSpacer />
 
-      <Form onSubmit={handleSubmit}>
-        {submitError && <div className="form__error">Error: {submitError}</div>}
-
-        {!isSent ? (
-          <>
-            <div className="form__title">
-              <h1>Sign Up</h1>
-            </div>
-
-            <div className="form__inputs">
-              <label htmlFor="firstName">
-                First Name{createAsterisk(firstName)}
-              </label>
-              <input
-                name="firstName"
-                placeholder="First Name"
-                required
-                value={firstName}
-                onChange={handleChange}
-              />
-              <label htmlFor="lastName">Last Name</label>
-
-              <input
-                name="lastName"
-                placeholder="Last Name"
-                value={lastName}
-                onChange={handleChange}
-              />
-
-              <label htmlFor="email">Email{createAsterisk(email)}</label>
-
-              <input
-                placeholder="Email"
-                name="email"
-                type="email"
-                required
-                value={email}
-                onChange={handleChange}
-              />
-
-              <label htmlFor="city">City</label>
-
-              <input
-                name="city"
-                placeholder="City"
-                value={city}
-                onChange={handleChange}
-              />
-
-              <label htmlFor="state">State</label>
-
-              <select name="state" value={state} onChange={handleChange}>
-                <option value="N/A">N/A</option>
-                {Object.entries(US_STATES).map(
-                  ([stateAbbreviation, fullStateName]) => (
-                    <option key={stateAbbreviation} value={stateAbbreviation}>
-                      {fullStateName}
-                    </option>
-                  )
-                )}
-              </select>
-
-              {state === 'N/A' && (
-                <>
-                  <label htmlFor="country">
-                    Country{createAsterisk(country)}
-                  </label>
-
-                  <select
-                    placeholder="Country"
-                    name="country"
-                    value={country}
-                    required
-                    onChange={handleChange}>
-                    <option value="N/A">N/A</option>
-
-                    {WORLD_COUNTRIES.map(({ name }) => (
-                      <option value={name}>{name}</option>
-                    ))}
-                  </select>
-                </>
-              )}
-
-              <label htmlFor="zipCode">Zip Code</label>
-
-              <input
-                placeholder="Zip Code"
-                name="zipCode"
-                value={zipCode}
-                onChange={handleChange}
-              />
-              <button type="submit">JOIN</button>
-            </div>
-          </>
-        ) : (
-          <div className="form__success">
-            <h1>Thank you!</h1>
+      {submitLoading ? (
+        <Form>
+          <div className="form__loading">
+            <h1>Loading...</h1>
           </div>
-        )}
-      </Form>
+        </Form>
+      ) : (
+        <Form onSubmit={handleSubmit}>
+          {submitError && (
+            <div className="form__error">Error: {submitError}</div>
+          )}
+
+          {!isSent ? (
+            <>
+              <div className="form__title">
+                <h1>Sign Up</h1>
+              </div>
+
+              <div className="form__inputs">
+                <label htmlFor="firstName">
+                  First Name{createAsterisk(firstName)}
+                </label>
+                <input
+                  name="firstName"
+                  placeholder="First Name"
+                  required
+                  value={firstName}
+                  onChange={handleChange}
+                />
+                <label htmlFor="lastName">Last Name</label>
+
+                <input
+                  name="lastName"
+                  placeholder="Last Name"
+                  value={lastName}
+                  onChange={handleChange}
+                />
+
+                <label htmlFor="email">Email{createAsterisk(email)}</label>
+
+                <input
+                  placeholder="Email"
+                  name="email"
+                  type="email"
+                  required
+                  value={email}
+                  onChange={handleChange}
+                />
+
+                <label htmlFor="city">City</label>
+
+                <input
+                  name="city"
+                  placeholder="City"
+                  value={city}
+                  onChange={handleChange}
+                />
+
+                <label htmlFor="state">State</label>
+
+                <select name="state" value={state} onChange={handleChange}>
+                  <option value="N/A">N/A</option>
+                  {Object.entries(US_STATES).map(
+                    ([stateAbbreviation, fullStateName]) => (
+                      <option key={stateAbbreviation} value={stateAbbreviation}>
+                        {fullStateName}
+                      </option>
+                    )
+                  )}
+                </select>
+
+                {state === 'N/A' && (
+                  <>
+                    <label htmlFor="country">
+                      Country{createAsterisk(country)}
+                    </label>
+
+                    <select
+                      placeholder="Country"
+                      name="country"
+                      value={country}
+                      required
+                      onChange={handleChange}>
+                      <option value="N/A">N/A</option>
+
+                      {WORLD_COUNTRIES.map(({ name }) => (
+                        <option value={name}>{name}</option>
+                      ))}
+                    </select>
+                  </>
+                )}
+
+                <label htmlFor="zipCode">Zip Code</label>
+
+                <input
+                  placeholder="Zip Code"
+                  name="zipCode"
+                  value={zipCode}
+                  onChange={handleChange}
+                />
+                <button type="submit">JOIN</button>
+              </div>
+            </>
+          ) : (
+            <div className="form__success">
+              <h1>Thank you!</h1>
+              <h2>{newUser?.email} has been added to the mailing list.</h2>
+            </div>
+          )}
+        </Form>
+      )}
     </ErrorBoundary>
   );
 }
@@ -256,6 +293,8 @@ const Form = styled.form`
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
+    gap: 5px;
 
     h1 {
       color: #fff;
@@ -263,9 +302,32 @@ const Form = styled.form`
       text-transform: uppercase;
       font-size: 1.4rem;
     }
+
+    h2 {
+      margin-top: 5px;
+      color: #fff;
+      font-family: 'Montserrat', sans-serif;
+      text-transform: uppercase;
+      font-size: 1.2rem;
+    }
   }
 
   .form__title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+
+    h1 {
+      margin-top: 0;
+      font-size: 1.4rem;
+      color: #fff;
+      font-family: 'Montserrat', sans-serif;
+      text-transform: uppercase;
+    }
+  }
+
+  .form__loading {
     display: flex;
     align-items: center;
     justify-content: center;

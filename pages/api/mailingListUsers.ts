@@ -25,7 +25,7 @@ export default async function handler(
         const newUser = await MailingListUser.create(
           req.body
         ); /* create a new model in the database */
-        res.status(201).json({ success: true, data: newUser });
+        res.status(201).json({ success: true, newUser });
       } catch (error) {
         if (error.keyValue?.email !== null && error?.code === 11000) {
           res.status(400).json({

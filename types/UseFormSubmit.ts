@@ -5,4 +5,5 @@ export default interface UseFormSubmit {
   submitLoading: boolean;
   submitError: Error | null;
   handleSubmit: AsyncFunction<null, null>;
+  resetSubmitState: () => void;
 }
