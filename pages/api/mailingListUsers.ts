@@ -22,10 +22,7 @@ const allowCors = (fn) => async (req, res) => {
   return await fn(req, res);
 };
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { method } = req;
 
   await dbConnect();

@@ -2,7 +2,7 @@ import fetch from 'isomorphic-unfetch';
 
 let header = new Headers({
   'Access-Control-Allow-Origin': '*',
-  'Content-Type': 'multipart/form-data',
+  'Content-Type': 'application/json',
 });
 
 export const postNewMailingListUser = async (body) => {
@@ -14,12 +14,6 @@ export const postNewMailingListUser = async (body) => {
       // headers: {
       //   Accept: 'application/json',
       //   'Content-Type': 'application/json',
-      //   'Access-Control-Allow-Origin': '*',
-      //   Origin: baseURL,
-      //   'access-control-allow-methods': 'GET',
-      // },
-      // header: {
-
       // },
       header,
       body: JSON.stringify(body),
