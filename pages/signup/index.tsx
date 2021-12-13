@@ -319,6 +319,7 @@ const Form = styled.form`
     justify-content: center;
     flex-direction: column;
     gap: 5px;
+    padding: 20px;
 
     h1 {
       color: #fff;
@@ -344,7 +345,7 @@ const Form = styled.form`
 
     h1 {
       margin-top: 0;
-      font-size: 1.4rem;
+      font-size: 2rem;
       color: #fff;
       font-family: 'Montserrat', sans-serif;
       text-transform: uppercase;
