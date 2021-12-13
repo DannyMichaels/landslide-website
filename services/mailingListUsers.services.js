@@ -14,7 +14,11 @@ export const postNewMailingListUser = async (body) => {
     }).then((r) => r.json());
 
     const { success = false, newUser = null, error = '' } = response;
-    console.log({ response });
+
+    if (error !== '') {
+      throw new Error(error.toString());
+    }
+
     return { success, newUser, error };
   } catch (error) {
     throw error;

@@ -57,13 +57,19 @@ export default function Signup() {
 
   const { firstName, lastName, email, city, state, country, zipCode } = fields;
 
+  const reset = () => {
+    resetSubmitState();
+    resetFormFields();
+    setNewUser(null);
+  };
+
   useEffect(() => {
     if (isSent) {
       setTimeout(() => {
         resetSubmitState();
         resetFormFields();
         setNewUser(null);
-      }, 3000);
+      }, 10000);
     }
   }, [isSent]);
 
@@ -90,9 +96,7 @@ export default function Signup() {
         </Form>
       ) : (
         <Form onSubmit={handleSubmit}>
-          {submitError && (
-            <div className="form__error">Error: {submitError}</div>
-          )}
+          {submitError && <div className="form__error">{submitError}</div>}
 
           {!isSent ? (
             <>
@@ -183,7 +187,7 @@ export default function Signup() {
                   onChange={handleChange}
                 />
 
-                <button type="submit">JOIN</button>
+                <button type="submit">Join</button>
 
                 <div className="terms__toggle">
                   <u onClick={() => setTermsShowing((prevState) => !prevState)}>
@@ -205,6 +209,7 @@ export default function Signup() {
             <div className="form__success">
               <h1>Thank you!</h1>
               <h2>{newUser?.email} has been added to the mailing list.</h2>
+              <button onClick={reset}>Go Back</button>
             </div>
           )}
         </Form>
@@ -287,7 +292,8 @@ const Form = styled.form`
     }
   }
 
-  button[type='submit'] {
+  button {
+    text-transform: uppercase;
     margin-top: 20px;
     background: black;
     color: #fff;

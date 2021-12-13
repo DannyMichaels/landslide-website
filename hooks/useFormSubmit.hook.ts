@@ -19,19 +19,14 @@ export default function useFormSubmit(onSubmit: OnSubmitFn): UseFormSubmit {
 
       try {
         setSubmitLoading(true);
-        const { error = '', success } = await onSubmit();
+        const { success } = await onSubmit();
 
-        if (error) {
-          setIsSent(false);
-          setSubmitError(error);
-        } else {
-          setIsSent(success);
-          setSubmitError('');
-        }
+        setIsSent(success);
+        setSubmitError('');
 
         setSubmitLoading(false);
       } catch (error) {
-        setSubmitError(error);
+        setSubmitError(error.toString());
         setSubmitLoading(false);
         setIsSent(false);
       }
