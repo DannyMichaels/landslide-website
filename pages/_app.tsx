@@ -3,6 +3,7 @@ import AudioPlayer from '../components/AudioPlayer/AudioPlayer';
 import Layout from '../components/shared/Layout/Layout';
 import { AppStateProvider } from './../context/state';
 import Head from 'next/head';
+import NextNProgress from 'nextjs-progressbar';
 
 const GlobalStyle = createGlobalStyle`
 body {
@@ -50,6 +51,8 @@ function App({ Component, pageProps }) {
 
         <ThemeProvider theme={theme}>
           <Layout>
+            {/* https://www.npmjs.com/package/nextjs-progressbar */}
+            <NextNProgress color="#fff" height={4} />
             <Component {...pageProps} />
           </Layout>
 

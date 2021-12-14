@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 import Link from 'next/link';
 import Burger from './Burger';
-import { useRouter } from 'next/router';
+import useClickAwayListener from '../../../hooks/useClickAwayListener';
 
 const LINKS = [
   {
@@ -27,20 +27,29 @@ const LINKS = [
 export default function Nav() {
   const [isNavOpen, setIsNavOpen] = useState(false);
 
-  const router = useRouter();
+  // close nav when user clicks away
+  const navRef = useClickAwayListener((e: PointerEvent) => {
+    const element: any = e.target;
+    const elementId: string = (e.target as HTMLDivElement).id;
 
-  useEffect(() => {
+    if (elementId === 'burger' || element.parentNode.id === 'burger') {
+      // don't close if clicked burger icon, let burger do the closing
+      return;
+    }
+
     setIsNavOpen(false);
-  }, [router?.pathname]);
+  });
 
   return (
     <>
       <Burger isNavOpen={isNavOpen} setIsNavOpen={setIsNavOpen} />
 
-      <StyledNav isOpen={isNavOpen}>
+      {isNavOpen && <NavBackground className="nav__background" />}
+
+      <StyledNav isOpen={isNavOpen} ref={navRef}>
         <div className="nav__items">
           {LINKS.map((link) => (
-            <LinkContainer key={link.text}>
+            <LinkContainer key={link.text} onClick={() => setIsNavOpen(false)}>
               <Link href={link.route}>{link.text}</Link>
             </LinkContainer>
           ))}
@@ -50,11 +59,15 @@ export default function Nav() {
   );
 }
 
+interface StyleProps {
+  isOpen: boolean;
+}
+
 const StyledNav = styled.nav`
   padding-top: 20px;
   padding-bottom: 20px;
 
-  width: ${({ isOpen }) => `${isOpen ? '250px' : '0'}`};
+  width: ${({ isOpen }: StyleProps) => `${isOpen ? '250px' : '0'}`};
 
   border-right: ${({ isOpen, theme }) =>
     isOpen ? `1px solid ${theme.colors.primary}` : '0'};
@@ -126,4 +139,19 @@ const LinkContainer = styled.div`
       color: rgba(255, 255, 255, 0.4);
     }
   }
+`;
+
+const NavBackground = styled.div`
+  @media (min-width: 640px) {
+    display: none;
+  }
+
+  display: block;
+  position: fixed;
+  z-index: 400;
+
+  background-color: rgba(0, 0, 0, 0.6);
+
+  width: 100vw;
+  height: 100vh;
 `;

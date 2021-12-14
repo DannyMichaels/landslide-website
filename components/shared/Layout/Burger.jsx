@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
 const StyledBurger = styled.div`
@@ -48,6 +48,7 @@ const Burger = ({ isNavOpen, setIsNavOpen }) => {
   return (
     <>
       <StyledBurger
+        id="burger"
         isOpen={isNavOpen}
         onClick={() => setIsNavOpen((prevState) => !prevState)}>
         <div />
